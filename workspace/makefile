@@ -1,7 +1,5 @@
-Test:Test.c
-	g++ $^ -o $@
-fork:fork.c
+vfork:vfork.c
 	g++ $^ -o $@
 .PHONY:clean
 clean:
-	rm -rf Test
+	rm -rf fork
