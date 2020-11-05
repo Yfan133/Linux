@@ -4,7 +4,6 @@
 #include <string.h>
 
 #define KEY 0x88888888
-
 int main()
 {
     int shmid = shmget(KEY, 1024, IPC_CREAT | 0664);

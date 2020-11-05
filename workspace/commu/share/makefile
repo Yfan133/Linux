@@ -1,7 +1,5 @@
-all:write read
-write:share.c
-	gcc $^ -o $@
+all:read write
 read:read.c
 	gcc $^ -o $@
-pipe:pipe.c
+write:write.c
 	gcc $^ -o $@
