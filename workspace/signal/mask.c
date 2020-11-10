@@ -12,7 +12,7 @@ int main()
     signal(40,fun);
 
     sigset_t set;
-    sigfillset(&set);
+    sigfillset(&set);   //
 
     sigset_t oldset;
     sigprocmask(SIG_SETMASK,&set,&oldset);

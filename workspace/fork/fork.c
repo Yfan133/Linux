@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<unistd.h>
+#include<stdlib.h>
 int main()
 {
     int g_val=100;
@@ -10,11 +11,15 @@ int main()
     {
         g_val=200;
         printf("this is child. %d-%d-g_val=%d\n",getpid(),&pid,g_val);
-        //exit(0);//子进程先于父进程退出，造成僵尸进程
+        exit(0);//子进程先于父进程退出，造成僵尸进程
     }
     else
         printf("error\n");
     //sleep(100);
-    printf("this is progress\n");
+    while(1)
+    {
+        printf("this is progress\n");
+        sleep(10);
+    }
     return 0;
 }
