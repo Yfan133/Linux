@@ -8,7 +8,7 @@ void func(int signo)
 }
 int main()
 {
-    signal(SIGCHLD,func);
+    signal(SIGCHLD,func);   //自定义SIGCHLD信号处理方式
     pid_t pid=fork();
     if(pid<0)
     {
@@ -17,14 +17,15 @@ int main()
     }
     else if(pid==0)
     {
-        sleep(3);
-        printf("this is child!666666666666666666\n");
-        _exit(0);
+        sleep(10);
+        printf("this is child!886\n");
+        //_exit(0);
+        return 0;
     }
     else{
         while(1)
         {
-            printf("this is linux!\n");
+            printf("this is father....!\n");
             sleep(1);
         }
     }
