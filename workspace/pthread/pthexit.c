@@ -4,11 +4,11 @@
 void* thread_start(void* arg)
 {
     //pthread_exit(NULL);
-    pthread_cancel(pthread_self());    //为什么没有直接退出工作线程而是还打印了一次
+    pthread_cancel(pthread_self());    //为什么没有直接退出工作线程而是还打印了一次,因为pthread_cancel这个接口不会立即退出，而是会有延迟，然后退出,这个延迟不会超过1s
     while(1)
     {
         printf("i am new thread!\n");
-        sleep(5);
+        sleep(1);
     }
     return NULL;
 }
