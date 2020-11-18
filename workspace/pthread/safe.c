@@ -24,7 +24,7 @@ void* thread_start(void* arg)       //抢票程序
         }
         pthread_mutex_unlock(&lock);      //这里不解锁的话，拿到第100张票之后会继续循环，自己卡住了自己，死锁！
     }
-    //pthread_mutex_unlock(&lock);
+    pthread_mutex_unlock(&lock);
     return NULL;
 }
 
