@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<iostream>
 #include<unistd.h>
 #include<pthread.h>
 pthread_mutex_t lock;
@@ -7,9 +8,25 @@ pthread_cond_t cond_2;
 pthread_cond_t cond_3;
 
 int g_val=1;
-
+class Foo
+{
+    public:
+        void one()
+        {
+            printf("one");
+        }
+        void two()
+        {
+            printf("two");
+        }
+        void three()
+        {
+            printf("three\n");
+        }
+};
 void* thread_1(void* arg)
 {
+    Foo* ti=(Foo*)arg;
     while(1)
     {
         pthread_mutex_lock(&lock);
@@ -18,7 +35,7 @@ void* thread_1(void* arg)
             pthread_cond_wait(&cond_1,&lock);
         }
         ++g_val;
-        printf("one ");
+        ti->one();
         pthread_mutex_unlock(&lock);
         pthread_cond_signal(&cond_2);
     }
@@ -26,6 +43,7 @@ void* thread_1(void* arg)
 }
 void* thread_2(void* arg)
 {
+    Foo* ti=(Foo*)arg;
     while(1)
     {
         pthread_mutex_lock(&lock);
@@ -34,7 +52,7 @@ void* thread_2(void* arg)
             pthread_cond_wait(&cond_2,&lock);
         }
         ++g_val;
-        printf("two ");
+        ti->two();
         pthread_mutex_unlock(&lock);
         pthread_cond_signal(&cond_3);
     }
@@ -42,6 +60,7 @@ void* thread_2(void* arg)
 }
 void* thread_3(void* arg)
 {
+    Foo* ti=(Foo*)arg;
     while(1)
     {
         pthread_mutex_lock(&lock);
@@ -50,7 +69,7 @@ void* thread_3(void* arg)
             pthread_cond_wait(&cond_3,&lock);
         }
         ++g_val;
-        printf("three\n");
+        ti->three();
         sleep(1);
         pthread_mutex_unlock(&lock);
         pthread_cond_signal(&cond_1);
@@ -59,14 +78,18 @@ void* thread_3(void* arg)
 }
 int main()
 {
-    pthread_t tid;
+    pthread_t tid[3];
+    Foo *fo=new Foo;
     pthread_mutex_init(&lock,NULL);
     pthread_cond_init(&cond_1,NULL);
     pthread_cond_init(&cond_2,NULL);
     pthread_cond_init(&cond_3,NULL);
-    pthread_create(&tid,NULL,thread_1,NULL);
-    pthread_create(&tid,NULL,thread_2,NULL);
-    pthread_create(&tid,NULL,thread_3,NULL);
-    pthread_join(tid,NULL);
+    pthread_create(&tid[0],NULL,thread_1,(void*)fo);
+    pthread_create(&tid[1],NULL,thread_2,(void*)fo);
+    pthread_create(&tid[2],NULL,thread_3,(void*)fo);
+    for(int i=0;i<3;i++)
+    {
+        pthread_join(tid[i],NULL);
+    }
     return 0;
 }
