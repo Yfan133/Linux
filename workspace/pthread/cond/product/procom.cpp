@@ -5,7 +5,7 @@
 #include<cstdio>
 
 #define CAPACITY 1
-#define THREADCOUNT 2
+#define THREADCOUNT 1
 
 class BlockQueue
 {

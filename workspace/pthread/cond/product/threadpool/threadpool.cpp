@@ -6,7 +6,7 @@
 
 #define THREADCOUNT 4
 
-typedef (void*)(*Handler_t)(int);
+typedef void* (*Handler_t)(int);
 class ThreadTask
 {
     public:
