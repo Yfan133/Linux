@@ -4,8 +4,8 @@
 #include<queue>
 #include<cstdio>
 
-#define CAPACITY 1
-#define THREADCOUNT 1
+#define CAPACITY 4
+#define THREADCOUNT 2
 
 class BlockQueue
 {
