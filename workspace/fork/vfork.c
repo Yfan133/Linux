@@ -8,7 +8,8 @@ int main()
     }else if(pid==0){
         printf("this is child!\n");
         sleep(3);
-        return 0;
+        _exit(0);
+        //return 0;
     }else{
         while(1)
         {

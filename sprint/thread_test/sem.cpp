@@ -56,7 +56,7 @@ public:
 void* ProStart(void*arg)
 {
   RingQueue* rq=(RingQueue*)arg;
-  int data=0;
+  int data=1;
   while(1)
   {
     rq->Push(data);

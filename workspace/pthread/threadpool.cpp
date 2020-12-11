@@ -8,13 +8,13 @@
 
 typedef void (*Handler_t)(int);  //函数指针类型
 
-class ThreadTask      //队列元素类型
+class ThreadTask      //队列的元素类型
 {
   private:
     Handler_t handler_; //保存处理数据的函数
     int data_;          //待处理的数据
   public:
-    ThreadTask(Handler_t handler,int data)
+    ThreadTask(Handler_t handler, int data)
       :handler_(handler)
        ,data_(data)
   {}
@@ -40,14 +40,14 @@ class ThreadPool
 
     bool IsExit;                //退出标志位  
   public:
-    ThreadPool(size_t capacity,size_t thread_capacity)
+    ThreadPool(size_t capacity, size_t thread_capacity)
       :capacity_(capacity)
        ,thread_capacity_(thread_capacity)
   {
-    pthread_mutex_init(&lock_,NULL);
-    pthread_cond_init(&con_,NULL);
+    pthread_mutex_init(&lock_, NULL);
+    pthread_cond_init(&con_, NULL);
 
-    IsExit=false;                   //标志当前不能退出
+    IsExit = false;                   //标志当前不能退出
   }
 
     ~ThreadPool()
@@ -56,47 +56,46 @@ class ThreadPool
       pthread_cond_destroy(&con_);
     }
 
-    bool Push(ThreadTask* tt) //这里tt是入参，push接口是临界区
+    bool Push(ThreadTask* tt)       //这里tt是入参，push接口是临界区
     {
       pthread_mutex_lock(&lock_);   //这里没有生产者队列，因为来自网络的数据是无法预测的
-      if(IsExit)    //如果线程已经退出则无法再进行插入
+      if(IsExit)                    //如果线程已经退出,则无法再进行插入
       {
         pthread_mutex_unlock(&lock_);
         return -1;
       }
-      que_.push(tt);
+      que_.push(tt);                  //往队列中插入元素
       pthread_mutex_unlock(&lock_);
       pthread_cond_signal(&con_);
       return true;
     }
 
-    bool Pop(ThreadTask** tt)
+    bool Pop(ThreadTask** tt)         //tt是出参
     {
-      *tt=que_.front();
+      *tt = que_.front();             //能访问到pop这里，说明已经保证了互斥和同步属性，线程入口函数中保证了互斥和同步
       que_.pop();
       return true;
     }
 
     void ThreadJoin()
     {
-      for(int i=0;i<THREADCOUNT;i++)
-        pthread_join(tid_[i],NULL);
+      for(int i = 0; i < THREADCOUNT; i++)  //等待线程全部退出之后，回收退出资源防止内存泄露
+        pthread_join(tid_[i], NULL);
     }
 
-    void ThreadExit()
+    void ThreadExit()                 //发起线程退出信号
     {
       pthread_mutex_lock(&lock_);
-      IsExit=true;
+      IsExit = true;
       pthread_mutex_unlock(&lock_);
-
-      pthread_cond_broadcast(&con_);  
+      pthread_cond_broadcast(&con_);  //这里一定要调用boardcast接口，把等待队列中的元素全部通知出来。
     }
 
-    bool ThreadCreate()
+    bool ThreadCreate()             //创建线程
     {
-        for(int i=0;i<THREADCOUNT;i++)
+        for(int i = 0; i < THREADCOUNT; i++)
         {
-          if(0>pthread_create(&tid_[i],NULL,ThreadStart,(void*)this))
+          if(0 > pthread_create(&tid_[i], NULL, ThreadStart, (void*)this))
           {
             perror("pthread_create");
             return false;
@@ -105,21 +104,21 @@ class ThreadPool
         return true;
     }
   private:
-    static void* ThreadStart(void* arg)
+    static void* ThreadStart(void* arg)   //线程入口函数,static修饰的，参数传的是this指针
     {
-      ThreadPool* tp=(ThreadPool*)arg;
+      ThreadPool* tp = (ThreadPool*)arg;  //将this指针通过强转接收
       while(1)
       {
         pthread_mutex_lock(&tp->lock_);
-        while(tp->que_.empty())
+        while(tp->que_.empty())           //循环判断资源是否可用
         {
-          if(tp->IsExit)
+          if(tp->IsExit)                  //检查是否可以退出
           {
             tp->thread_capacity_--;
             pthread_mutex_unlock(&tp->lock_);
             pthread_exit(NULL);
           }
-          pthread_cond_wait(&tp->con_,&tp->lock_);
+          pthread_cond_wait(&tp->con_, &tp->lock_);
         }
         ThreadTask* tt;
         tp->Pop(&tt);
@@ -131,22 +130,23 @@ class ThreadPool
 };
 void DealDate(int data)
 {
-  printf("data:%d\n",data);
+  printf("deal data:%d\n",data);
 }
 int main()
 {
-  ThreadPool* tp=new ThreadPool(4,THREADCOUNT);
+  ThreadPool* tp = new ThreadPool(4, THREADCOUNT);
   
   tp->ThreadCreate();
   
-  for(int i=1;i<=100;i++)
+  for(int i = 1; i <= 100; i++)
   {
     ThreadTask* tt=new ThreadTask(DealDate,i);
     tp->Push(tt);
   }
   sleep(10);
-  tp->ThreadExit();
-  tp->ThreadJoin();
+  tp->ThreadExit();   //标志线程当前可以退出了
+  tp->ThreadJoin();   //等待回收线程的退出资源防止内存泄露
   delete tp;
+  tp = NULL;
   return 0;
 }
