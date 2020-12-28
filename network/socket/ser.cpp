@@ -6,7 +6,7 @@ int main()
 {
   Udp u;
   CHECK_RET(u.CreateSock());
-  CHECK_RET(u.Bind("192.168.0.38",8888));
+  CHECK_RET(u.Bind("192.168.0.88",18888));
 
   while(1)
   {

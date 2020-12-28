@@ -6,6 +6,7 @@ int main(int argc, char* argv[])
   {
     printf("using ./svr [ip] [port]\n");
     return -1;
+
   }
   UdpSocket us;
   us.Socket();
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
     fflush(stdout);
     std::cin >> data;
     us.Sendto(data, &addr);
+    data.clear();
   }
   return 0;
 }

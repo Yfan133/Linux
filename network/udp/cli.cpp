@@ -6,12 +6,13 @@ int main(int argc, char* argv[])
   {
     printf("using ./svr [ip] [port]\n");
     return -1;
+
   }
   UdpSocket us;
   us.Socket();
   std::string ip(argv[1]);
   uint16_t port = atoi(argv[2]);
-  
+
   struct sockaddr_in dest_addr;
   dest_addr.sin_family = AF_INET;
   dest_addr.sin_port = htons(port);
@@ -27,6 +28,8 @@ int main(int argc, char* argv[])
     data.clear();
     us.Recv(&data, &dest_addr);
     std::cout << "Server say : " << data << std::endl;
+    data.clear();
   }
   return 0;
+
 }
