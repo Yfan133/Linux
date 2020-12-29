@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     std::cout << "please enter msg to Server : ";
     fflush(stdout);
     std::cin >> data;
-    us.Sendto(data, &dest_addr);
+    us.Sendto(data, &dest_addr);  //发送到地址为dest_addr的对端
     data.clear();
     us.Recv(&data, &dest_addr);
     std::cout << "Server say : " << data << std::endl;

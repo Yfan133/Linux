@@ -49,7 +49,7 @@ class TcpSock
       return true;
     }
     //侦听，告诉操作系统内核可以建立连接了，三次握手
-    bool Listen(int backlog = 5)
+    bool Listen(int backlog = 1)
     {
       int ret = listen(sockfd_, backlog); //backlog是已完成队列大小，当队列被打满时可能会丢失也可能不会丢失
       if(ret < 0)

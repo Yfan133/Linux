@@ -16,20 +16,24 @@ int main(int argc, char* argv[])
   CHECK_RET(ts.Bind(ip, port)); 
   CHECK_RET(ts.Listen()); 
 
-  TcpSock ser_ts; //实例化对象用于进行1v1服务(new_socket)
-  struct sockaddr_in clientaddr;
-  //accept在while(1)外则只能和一个客户端聊
-  CHECK_RET(ts.Accept(&clientaddr, &ser_ts));
-  while (1)
+  while(1)
   {
-    std::string buf;
-    ser_ts.Recv(&buf);  //接受对端发送的消息
-    printf("Client say: %s\n",buf.c_str());
-
-    printf("please send msg to client: ");
-    fflush(stdout);
-    std::cin >> buf;
-    ser_ts.Send(buf);
+    sleep(5);
   }
+  //TcpSock ser_ts; //实例化对象用于进行1v1服务(new_socket)
+  //struct sockaddr_in clientaddr;
+  //accept在while(1)外则只能和一个客户端聊
+  //CHECK_RET(ts.Accept(&clientaddr, &ser_ts));
+  //while (1)
+  //{
+  //  std::string buf;
+  //  ser_ts.Recv(&buf);  //接受对端发送的消息
+  //  printf("Client say: %s\n",buf.c_str());
+
+  //  printf("please send msg to client: ");
+  //  fflush(stdout);
+  //  std::cin >> buf;
+  //  ser_ts.Send(buf);
+  //}
   return 0;
 }
