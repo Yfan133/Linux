@@ -22,7 +22,17 @@ int main(int argc, char* argv[])
     fflush(stdout);
     std::cin >> buf;
     CHECK_RET(ts.Send(buf));
-    CHECK_RET(ts.Recv(&buf));
+    int ret = ts.Recv(&buf);
+    if(ret < 0)
+    {
+      ts.Close();
+      return -1;
+    }
+    else if(ret == 0)
+    {
+      ts.Close();
+      return 0;
+    }
     printf("Client say: %s\n",buf.c_str());
   }
   return 0;

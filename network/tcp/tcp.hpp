@@ -101,16 +101,22 @@ class TcpSock
       return true;
     }
     //接受数据
-    bool Recv(std::string* data)  //出参
+    int Recv(std::string* data)  //出参
     {
       char buf[1024] = { 0 };
       int recvsize = recv(sockfd_, buf, sizeof(buf) - 1, 0);
       if(recvsize < 0)
       {
         perror("recv");
-        return false;
+        return -1;
+      }
+      else if(recvsize == 0)
+      {
+        printf("peer shutdown\n");
+        close(sockfd_);
+        return 0;
       }
      (*data).assign(buf, recvsize);
-      return true;
+      return 1;
     }
 };

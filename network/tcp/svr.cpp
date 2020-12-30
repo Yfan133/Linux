@@ -23,12 +23,23 @@ int main(int argc, char* argv[])
   while (1)
   {
     std::string buf;
-    ser_ts.Recv(&buf);  //接受对端发送的消息
+    int ret = ser_ts.Recv(&buf);  //接受对端发送的消息
+    if(ret < 0)
+    {
+      ts.Close();
+      return -1;
+    }
+    else if(ret == 0)
+    {
+      ts.Close();
+      return 0;
+    }
     printf("Client say: %s\n",buf.c_str());
 
     printf("please send msg to client: ");
     fflush(stdout);
-    std::cin >> buf;
+    getline(std::cin, buf);
+    //buf.append("\r\n");
     ser_ts.Send(buf);
   }
   return 0;
