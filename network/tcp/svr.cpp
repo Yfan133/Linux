@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
   TcpSock ser_ts; //实例化对象用于进行1v1服务(new_socket)
   struct sockaddr_in clientaddr;
-  //accept在while(1)外则只能和一个客户端聊
+  //accept在whilccept(&ce(1)外则只能和一个客户端聊
   CHECK_RET(ts.Accept(&clientaddr, &ser_ts));
   while (1)
   {
@@ -29,9 +29,10 @@ int main(int argc, char* argv[])
       ts.Close();
       return -1;
     }
-    else if(ret == 0)
+    else if(ret == 0) //若返回值为0说明对端关闭了连接
     {
       ts.Close();
+      ser_ts.Close();
       return 0;
     }
     printf("Client say: %s\n",buf.c_str());

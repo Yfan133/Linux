@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
   {
     TcpSock* ser_ts = new TcpSock(); //实例化对象用于进行1v1服务(new_socket)
     struct sockaddr_in clientaddr;
-    //主线程只负责accep
+    //主线程只负责accept
     CHECK_RET(ts.Accept(&clientaddr, ser_ts));
     printf("Have a new connection ip=%s, port=%d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
