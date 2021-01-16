@@ -10,7 +10,7 @@ int main()
   // 创建侦听套接字
   CHECK_RET(ts.SockCreate());
   // 绑定地址信息
-  CHECK_RET(ts.Bind("192.168.0.88", 18888));
+  CHECK_RET(ts.Bind("192.168.43.29", 18888));
   // 侦听
   CHECK_RET(ts.Listen());
   // 创建新套接字，并接收连接
@@ -36,16 +36,16 @@ int main()
     //new_sock.Send(body);   
     
     // C++风格
-    //std::string body = "<html><h1>this is linux~</h1></html>";
-    //// 响应首行和响应头部
-    //std::stringstream ss;
-    //ss << "HTTP/1.1 200 OK\r\n";                      // 协议版本和状态(200 OK: 正常处理)
-    //ss << "Content-Type:text/html\r\n";               // 正文类型
-    //ss << "Content-Length:" << body.size() << "\r\n"; // 长度
-    //ss << "\r\n";                                     // 空行
-    //std::string header = ss.str();
-    //new_sock.Send(header);
-    //new_sock.Send(body);
+    std::string body = "<html><h1>this is linux~</h1></html>";
+    // 响应首行和响应头部
+    std::stringstream ss;
+    ss << "HTTP/1.1 200 OK\r\n";                      // 协议版本和状态(200 OK: 正常处理)
+    ss << "Content-Type:text/html\r\n";               // 正文类型
+    ss << "Content-Length:" << body.size() << "\r\n"; // 长度
+    ss << "\r\n";                                     // 空行
+    std::string header = ss.str();
+    new_sock.Send(header);
+    new_sock.Send(body);
     
     // 302重定向状态，搭配Location: http://www.baidu.com\r\n 使用
     //std::string body = "<html><h1>this is linux~</h1></html>";
@@ -60,17 +60,17 @@ int main()
     //new_sock.Send(header);
     //new_sock.Send(body);
 
-    std::string body = "<html><h1>this is linux~</h1></html>";
-    std::stringstream ss;
-    // 前提
-    ss << "HTTP/1.1 404 Page Not Found\r\n";
-    // 响应首行和响应头部
-    ss << "Content-Type: text/html\r\n";
-    ss << "Content-:Length: " << body.size() << "\r\n";
-    ss << "\r\n";
-    std::string header(ss.str());
-    new_sock.Send(header);
-    new_sock.Send(body);
+    //std::string body = "<html><h1>this is linux~</h1></html>";
+    //std::stringstream ss;
+    //// 前提
+    //ss << "HTTP/1.1 404 Page Not Found\r\n";
+    //// 响应首行和响应头部
+    //ss << "Content-Type: text/html\r\n";
+    //ss << "Content-:Length: " << body.size() << "\r\n";
+    //ss << "\r\n";
+    //std::string header(ss.str());
+    //new_sock.Send(header);
+    //new_sock.Send(body);
   }
   new_sock.Close();
   ts.Close();
