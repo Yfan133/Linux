@@ -1,15 +1,18 @@
 #pragma once
 
 #include <iostream>
+#include <sys/time.h>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
+
 #include <boost/algorithm/string.hpp>
 
-class FileOpen
+class FileUtil
 {
   public:
-    static bool file_open(const std::string file_path, std::string* content)
+    static bool file_read(const std::string file_path, std::string* content)
     {
       (*content).clear();
       std::ifstream file(file_path.c_str());
@@ -26,9 +29,20 @@ class FileOpen
       file.close();
       return true;
     }
+    static bool file_write(const std::string& file_path, const std::string& data)
+    {
+      std::ofstream file(file_path.c_str());
+      if (!file.is_open())
+      {
+        return false;
+      }
+      file.write(data.c_str(), data.size());
+      file.close();
+      return true;
+    }
 };
 
-class StringSpit
+class StringSplit
 {
   public:
     static void Split(const std::string& input, const std::string& split_char, std::vector<std::string>* output)
@@ -39,6 +53,24 @@ class StringSpit
 class Urlcode
 {
   public:
+    static void PraseBody(const std::string& body, std::unordered_map<std::string, std::string>* body_kv)
+    {
+      // 1.先按照&进行切分，切分成不同key=value
+      std::vector<std::string> kv_vec;
+      StringSplit::Split(body, "&", &kv_vec);
+      // 2.再按照=进行切分，把key value分开
+      for (const auto it : kv_vec)
+      {
+        std::vector<std::string> kv_sig;
+        StringSplit::Split(it, "=", &kv_sig);
+        if (kv_sig.size() != 2)
+        {
+          continue;
+        }
+        // 3.把切分后的key:value保存到map中返回给上层调用者
+        (*body_kv)[kv_sig[0]] = UrlDecode(kv_sig[1]);
+      }
+    }
     static unsigned char ToHex(unsigned char x)   
     {   
       return  x > 9 ? x + 55 : x + 48;   
@@ -95,4 +127,16 @@ class Urlcode
       }  
       return strTemp;  
     } 
+};
+// 获取时间戳
+class TimeUtil
+{
+  public:
+    // 返回给上层调用者
+    static int64_t GetTimeStampMs()
+    {
+      struct timeval tv;
+      gettimeofday(&tv, NULL);
+      return tv.tv_sec + tv.tv_usec / 1000;
+    }
 };

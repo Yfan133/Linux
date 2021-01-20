@@ -50,7 +50,7 @@ class OjModel
       {
         // 切分读取的这一行内容
         std::vector<std::string> vec;
-        StringSpit::Split(buf, " ", &vec);  // yikonggeqiefen
+        StringSplit::Split(buf, " ", &vec);
         // 保存切分出来的内容
         Questions ques;
         ques.id_ = vec[0];
@@ -60,9 +60,9 @@ class OjModel
         
         // 打开路径下的文件，并且保存试题的详细信息
         std::string dir = vec[3];
-        FileOpen::file_open(dir + "/desc.txt", &ques.desc_);
-        FileOpen::file_open(dir + "/header.cpp", &ques.header_);
-        FileOpen::file_open(dir + "/tail.cpp", &ques.tail_);
+        FileUtil::file_read(dir + "/desc.txt", &ques.desc_);
+        FileUtil::file_read(dir + "/header.cpp", &ques.header_);
+        FileUtil::file_read(dir + "/tail.cpp", &ques.tail_);
 
         // 把信息放入无序map中
         ques_map[ques.id_] = ques;
