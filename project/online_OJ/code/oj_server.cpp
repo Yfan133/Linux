@@ -30,8 +30,7 @@ int main()
       model.GetOneQues(req.matches[1], &question);  
       // 获取html页面
       std::string html;
-      Oj_View::FillInOneQuestion(question, &html);  
-      // 设置响应体
+      Oj_View::FillInOneQuestion(question, &html);
       resp.set_content(html, "text/html");
       });
   // 3.注册提交代码并运行的路径
@@ -39,7 +38,6 @@ int main()
       // 1.获取试题编号和内容
       Questions question;
       model.GetOneQues(req.matches[1], &question);
-
       // 2.对浏览器的请求体进行切分，切分成key:value形式，再进行url解码
       std::unordered_map<std::string, std::string> kv_map;
       Urlcode::PraseBody(req.body, &kv_map);
@@ -54,9 +52,12 @@ int main()
       Json::Value Resp_Js;
       Req_Js["code"] = code + question.tail_;
       Req_Js["stdin"] = stdin;
+      // httplib库会创建线程去处理注册的方法，因此高并发时写文件不是线程安全的
       Compiled::CompileAndRun(Req_Js, &Resp_Js);
       // 4.根据不同的运行结果，返回响应
-      resp.set_content("<html>this is Linux~</html>", 27, "text/html");
+      std::string html;
+      Oj_View::FillInResponse(Resp_Js, &html);
+      resp.set_content(html, "text/html");
       });
   svr.listen("192.168.23.128", 18888);
   return 0;
