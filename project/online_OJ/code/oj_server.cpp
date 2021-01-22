@@ -59,6 +59,6 @@ int main()
       Oj_View::FillInResponse(Resp_Js, &html);
       resp.set_content(html, "text/html");
       });
-  svr.listen("192.168.23.128", 18888);
+  svr.listen("0.0.0.0", 18888);
   return 0;
 }

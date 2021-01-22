@@ -62,7 +62,7 @@ class Compiled
       {
         // 运行失败，-1：创建子进程错误，-2：打开文件失败
         (*Resp)["errorno"] = RUN_ERROR;
-        (*Resp)["reason"] = "pragma exit by sig" + std::to_string(ret);
+        (*Resp)["reason"] = "pragma exit by sig : " + std::to_string(ret);
         //Clean(filename);
         return;
       }
@@ -118,7 +118,9 @@ class Compiled
           return -2;
         }
         dup2(fd_stderr, 2);
-        // 3.子进程程序替换去运行code
+        // 3.设置运行时间限制
+        alarm(1);
+        // 4.子进程程序替换去运行code
         execl(ExePath(filename).c_str(), ExePath(filename).c_str(), NULL);
         close(fd_stdout);
         close(fd_stderr);

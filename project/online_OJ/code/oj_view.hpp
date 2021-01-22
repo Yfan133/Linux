@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "/usr/include/jsoncpp/json/json.h"
+#include "jsoncpp/json/json.h"
 
 #include "oj_model.hpp"
 #include "ctemplate/template.h"
@@ -51,6 +51,7 @@ class Oj_View
       ctemplate::TemplateDictionary dic("resp");
       dic.SetValue("errorno", Resp["errorno"].asString());
       dic.SetValue("reason", Resp["reason"].asString());
+      dic.SetValue("stdout", Resp["stdout"].asString());
       ctemplate::Template* tl = ctemplate::Template::GetTemplate("./template/response.html", ctemplate::DO_NOT_STRIP);
       tl->Expand(html, &dic);
     }

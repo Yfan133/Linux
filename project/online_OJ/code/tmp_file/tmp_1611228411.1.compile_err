@@ -1,4 +1,0 @@
-./tmp_file/tmp_1611228411.1.cpp: In member function ‘bool Solution::isPalindrome(int)’:
-./tmp_file/tmp_1611228411.1.cpp:11:1: error: ‘hhh’ was not declared in this scope
- hhh
- ^~~
