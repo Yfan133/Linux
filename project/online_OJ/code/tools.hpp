@@ -137,6 +137,44 @@ class TimeUtil
     {
       struct timeval tv;
       gettimeofday(&tv, NULL);
-      return tv.tv_sec + tv.tv_usec / 1000;
+      return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    }
+    // get year mon day hour
+    static void GetTimeStamp(std::string* TimeStamp)
+    {
+      time_t st;
+      time(&st);
+
+      struct tm* t = localtime(&st);
+
+      char buf[30] = { 0 };
+      snprintf(buf, sizeof(buf) - 1, "%04d-%02d-%02d %02d:%02d:%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+      TimeStamp->assign(buf);
     }
 };
+enum LogLevel 
+{
+  INFO = 0,
+  WARNING,
+  ERROR,
+  FATAL,
+  DEBUG
+};
+const char* loglevel[] =
+{
+  "INFO",
+  "WARNING",
+  "ERROR",
+  "FATAL",
+  "DEBUG"
+};
+std::ostream& Log(LogLevel lev, const char* file, int line, const std::string& logmsg)
+{
+  std::string level_info = loglevel[lev];
+  std::string TimeStamp;
+  TimeUtil::GetTimeStamp(&TimeStamp);
+  std::cout << "[" << TimeStamp << " " << level_info << " " << file << ":" << line << "]" << logmsg;
+  return std::cout;
+}
+
+#define LOG(lev, msg) Log(lev, __FILE__, __LINE__, msg)

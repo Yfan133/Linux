@@ -1,2 +1,11 @@
-svr:oj_server.cpp
-	g++ $^ -o $@ -g -lpthread -I /home/test/Linux/project/library_file/ThirdPartLibForCpp/el7.x86_64/third_part/include -I /usr/include/jsoncpp -L /home/test/Linux/project/library_file/ThirdPartLibForCpp/el7.x86_64/third_part/lib -lctemplate -ljsoncpp
+INCLUDE_PATH=-I /home/test/third_part/include -I /usr/include/jsoncpp
+LIB_PATH=-L /home/test/third_part/lib -lpthread -lctemplate -ljsoncpp
+
+BIN=../bin/svr
+
+$(BIN):oj_server.cpp
+	g++ $^ -o $@ -g $(INCLUDE_PATH) $(LIB_PATH)
+
+.PHONY:clean
+clean:
+	rm $(BIN)

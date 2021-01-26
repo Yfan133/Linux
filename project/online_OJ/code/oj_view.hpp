@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <json/json.h>
 
 #include "oj_model.hpp"
 #include "ctemplate/template.h"
@@ -43,6 +44,15 @@ class Oj_View
       // 从文件中获取http模板
       ctemplate::Template* tl = ctemplate::Template::GetTemplate("./template/question.html", ctemplate::DO_NOT_STRIP);
       // 填充数据
+      tl->Expand(html, &dic);
+    }
+    static void FillInResponse(const Json::Value& Resp, std::string* html)
+    {
+      ctemplate::TemplateDictionary dic("resp");
+      dic.SetValue("errorno", Resp["errorno"].asString());
+      dic.SetValue("reason", Resp["reason"].asString());
+      dic.SetValue("stdout", Resp["stdout"].asString());
+      ctemplate::Template* tl = ctemplate::Template::GetTemplate("./template/response.html", ctemplate::DO_NOT_STRIP);
       tl->Expand(html, &dic);
     }
 };
