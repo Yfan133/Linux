@@ -52,16 +52,25 @@ int main()
       Json::Value Resp_Js;
       Req_Js["code"] = code + question.tail_;
       Req_Js["stdin"] = stdin;
+<<<<<<< HEAD
       // 4.编译并运行用户提交的代码
       Compiled::CompileAndRun(Req_Js, &Resp_Js);
       // 5.根据不同的编译运行结果，返回响应
+=======
+      // httplib库会创建线程去处理注册的方法，因此高并发时写文件不是线程安全的
+      Compiled::CompileAndRun(Req_Js, &Resp_Js);
+      // 4.根据不同的运行结果，返回响应
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
       std::string html;
       Oj_View::FillInResponse(Resp_Js, &html);
       resp.set_content(html, "text/html");
       });
+<<<<<<< HEAD
   // 设置index.html
   svr.set_base_dir("./wwwroot");
   LOG(INFO, "listen_port") << ":18888" << std::endl;
+=======
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
   svr.listen("0.0.0.0", 18888);
   return 0;
 }

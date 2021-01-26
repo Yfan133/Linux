@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
+<<<<<<< HEAD
 #include <json/json.h>
+=======
+#include "jsoncpp/json/json.h"
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
 
 #include "oj_model.hpp"
 #include "ctemplate/template.h"

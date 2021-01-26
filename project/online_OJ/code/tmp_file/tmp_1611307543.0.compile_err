@@ -1,0 +1,4 @@
+./tmp_file/tmp_1611307543.0.cpp: In member function ‘bool Solution::isPalindrome(int)’:
+./tmp_file/tmp_1611307543.0.cpp:13:1: error: ‘sleep’ was not declared in this scope
+ sleep(1);
+ ^~~~~

@@ -5,7 +5,10 @@
 #include <atomic>
 #include <sys/wait.h>
 #include <sys/stat.h>
+<<<<<<< HEAD
 #include <sys/resource.h>
+=======
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
 #include <fcntl.h>
 #include <iostream>
 #include <string>
@@ -54,7 +57,11 @@ class Compiled
         std::string reason;
         FileUtil::file_read(ErrorPath(filename), &reason);
         (*Resp)["reason"] = reason;
+<<<<<<< HEAD
         Clean(filename);
+=======
+        //Clean(filename);
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
         return;
       }
       // 4.运行code
@@ -64,7 +71,11 @@ class Compiled
         // 运行失败，-1：创建子进程错误，-2：打开文件失败
         (*Resp)["errorno"] = RUN_ERROR;
         (*Resp)["reason"] = "pragma exit by sig : " + std::to_string(ret);
+<<<<<<< HEAD
         Clean(filename);
+=======
+        //Clean(filename);
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
         return;
       }
       // 5.设置响应
@@ -93,6 +104,10 @@ class Compiled
     }
     static int Run(const std::string& filename)
     {
+<<<<<<< HEAD
+=======
+      // 1.创建子进程
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
       int pid = fork();
       if (pid > 0)
       {
@@ -103,11 +118,14 @@ class Compiled
       }
       else if (pid == 0)
       {
+<<<<<<< HEAD
         // 1.设置内存限制
         struct rlimit rlim;
         rlim.rlim_cur = 30000 * 1024;
         rlim.rlim_max = RLIM_INFINITY;
         setrlimit(RLIMIT_AS, &rlim);
+=======
+>>>>>>> a97a47b0d93f4dcf18c6dbc40401961edf1d501c
         // 2.将标准输出和标准错误重定向到不同文件
         int fd_stdout = open(StdoutPath(filename).c_str(), O_RDWR | O_CREAT, 0666);
         if (fd_stdout < 0)
